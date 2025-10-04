@@ -1,9 +1,12 @@
 package project.main.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ingredient")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

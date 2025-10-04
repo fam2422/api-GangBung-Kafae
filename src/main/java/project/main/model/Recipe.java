@@ -3,10 +3,14 @@ package project.main.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "recipe")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,13 +19,15 @@ public class Recipe {
     private int sweetness;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public Recipe() { }
 
-    public Recipe(Long id, int sweetness) {
+    public Recipe(Long id, int sweetness,List<RecipeIngredient> ingredients) {
         this.id = id;
         this.sweetness = sweetness;
+        this.ingredients = ingredients;
     }
 
     public Long getId() {

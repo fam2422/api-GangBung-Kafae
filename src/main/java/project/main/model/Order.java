@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,14 +20,17 @@ public class Order {
     private String status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> orderItems = new ArrayList<>();
+
 
     public Order() { }
 
-    public Order(Long id, LocalDateTime createdAt, String status) {
+    public Order(Long id, LocalDateTime createdAt, String status,List<OrderItem> orderItems) {
         this.id = id;
         this.createdAt = createdAt;
         this.status = status;
+        this.orderItems = orderItems;
     }
 
     public Long getId() {

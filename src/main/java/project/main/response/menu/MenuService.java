@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.main.model.Menu;
+import project.main.model.Recipe;
+import project.main.response.recipe.RecipeRepository;
 
 @Service
 public class MenuService {
@@ -25,10 +27,18 @@ public class MenuService {
 		menuRepo.save(m);
 	}
 	
+	@Autowired
+	RecipeRepository recipeRepo; // ต้องสร้าง repo ของ Recipe ด้วย
+
 	public Menu addMenu(Menu m) {
-		menuRepo.save(m);
-		return m;
+	    if (m.getRecipe() != null && m.getRecipe().getId() != null) {
+	        Recipe recipeFromDb = recipeRepo.findById(m.getRecipe().getId())
+	            .orElseThrow(() -> new RuntimeException("Recipe not found"));
+	        m.setRecipe(recipeFromDb);
+	    }
+	    return menuRepo.save(m);
 	}
+
 	
 	public void deleteById(Long id) {
 		Menu menu = menuRepo.findById(id).orElseThrow(()->

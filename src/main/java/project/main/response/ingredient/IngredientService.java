@@ -31,10 +31,10 @@ public class IngredientService {
 	}
 	
 	public void deleteById(Long id) {
-		Ingredient recipe = ingredientRepo.findById(id).orElseThrow(()->
+		Ingredient ingredient = ingredientRepo.findById(id).orElseThrow(()->
 		new IngredientNotFoundException(id));
 		
-		ingredientRepo.delete(recipe);
+		ingredientRepo.delete(ingredient);
 	}
 	
 	public Ingredient updateIngredient(Long id,Ingredient i) {

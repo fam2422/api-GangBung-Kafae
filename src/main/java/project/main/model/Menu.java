@@ -1,9 +1,12 @@
 package project.main.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "menu")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -11,9 +14,10 @@ public class Menu {
 
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "recipe_id", referencedColumnName = "id")
     private Recipe recipe;
+
 
     private int price;
 

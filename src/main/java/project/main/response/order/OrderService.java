@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import project.main.model.Menu;
 import project.main.model.Order;
+import project.main.model.OrderItem;
+import project.main.response.menu.MenuRepository;
 
 @Service
 public class OrderService {
@@ -25,10 +28,21 @@ public class OrderService {
 		orderRepo.save(o);
 	}
 	
+	@Autowired
+	MenuRepository menuRepo;
+
 	public Order addOrder(Order o) {
-		orderRepo.save(o);
-		return o;
+	    for (OrderItem oi : o.getOrderItems()) {
+	        if (oi.getMenu() != null && oi.getMenu().getId() != null) {
+	            Menu menuFromDb = menuRepo.findById(oi.getMenu().getId())
+	                .orElseThrow(() -> new RuntimeException("Menu not found"));
+	            oi.setMenu(menuFromDb);
+	            oi.setOrder(o); // important! set back reference
+	        }
+	    }
+	    return orderRepo.save(o);
 	}
+
 	
 	public void deleteById(Long id) {
 		Order order = orderRepo.findById(id).orElseThrow(()->
