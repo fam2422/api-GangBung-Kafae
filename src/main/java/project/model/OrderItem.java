@@ -2,55 +2,60 @@ package project.model;
 
 import jakarta.persistence.*;
 
+@Entity
+@Table(name = "order_items")
 public class OrderItem {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
-	
-	private Long menuId;
-	private Long orderId;
-	private int qty;
-	
-	public OrderItem(Long id, Long menuId, Long orderId, int qty) {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private Long menuId;
+
+    private int qty;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    public OrderItem() {} // JPA ต้องมี default constructor
+
+    public OrderItem(Long id, Long menuId, int qty, Order order) {
         this.id = id;
         this.menuId = menuId;
-        this.orderId = orderId;
+        this.qty = qty;
+        this.order = order;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
+    }
+
+    public int getQty() {
+        return qty;
+    }
+
+    public void setQty(int qty) {
         this.qty = qty;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Order getOrder() {
+        return order;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getMenuId() {
-		return menuId;
-	}
-
-	public void setMenuId(Long menuId) {
-		this.menuId = menuId;
-	}
-
-	public Long getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
-
-	public int getQty() {
-		return qty;
-	}
-
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
-
-	
-	
-	
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 }

@@ -15,6 +15,7 @@ public class Order {
 	
 	private LocalDateTime createdAt;
 	private String status;
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> orderItems = new ArrayList<>();
 	
 	public Order(Long id, LocalDateTime createdAt, String status) {
