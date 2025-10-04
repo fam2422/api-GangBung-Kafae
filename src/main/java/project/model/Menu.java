@@ -12,7 +12,6 @@ public class Menu {
 	private String name;
 	private Long recipeId;
 	private int price;
-	private Recipe recipe;
 	
 	public Menu(Long id, Long recipeId, String name, int price) {
         this.id = id;
@@ -52,15 +51,6 @@ public class Menu {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-
-	public Recipe getRecipe() {
-		return recipe;
-	}
-
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
-	
 	
 	
 	

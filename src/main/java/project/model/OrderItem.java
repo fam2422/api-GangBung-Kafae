@@ -10,8 +10,6 @@ public class OrderItem {
 	private Long menuId;
 	private Long orderId;
 	private int qty;
-	private Menu menu;
-	private Order order;
 	
 	public OrderItem(Long id, Long menuId, Long orderId, int qty) {
         this.id = id;
@@ -52,21 +50,6 @@ public class OrderItem {
 		this.qty = qty;
 	}
 
-	public Menu getMenu() {
-		return menu;
-	}
-
-	public void setMenu(Menu menu) {
-		this.menu = menu;
-	}
-
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
 	
 	
 	
