@@ -11,6 +11,7 @@ import project.main.model.Ingredient;
 public class IngredientService {
 	@Autowired
 	IngredientRepository ingredientRepo;
+	
 	public List<Ingredient> getIngredients(){
 		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
 		return ingredients;
@@ -41,6 +42,7 @@ public class IngredientService {
 		Ingredient existingIngredient = ingredientRepo.findById(id).get();
 		existingIngredient.setName(i.getName());
 		existingIngredient.setStockQty(i.getStockQty());
+		existingIngredient.setUnit(i.getUnit() != null ? i.getUnit() : existingIngredient.getUnit());
 		return ingredientRepo.save(existingIngredient);
 	}
 }

@@ -1,20 +1,27 @@
 package project.main.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ingredient")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ingredient {
+	
+	public enum Unit{
+		piece,g,kg,ml,L
+	}
+	
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String name;
+    
     private Long stockQty;
-
+    
+    private Unit unit = Unit.ml; // default value 
     public Ingredient() { }
 
     public Ingredient(Long id, String name, Long stockQty) {
@@ -45,6 +52,14 @@ public class Ingredient {
 
     public void setStockQty(Long stockQty) {
         this.stockQty = stockQty;
+    }
+    
+    public Unit getUnit() {
+    	return unit;
+    }
+    
+    public void setUnit(Unit unit) {
+    	this.unit = unit;
     }
 
     @Override

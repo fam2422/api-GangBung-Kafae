@@ -1,20 +1,30 @@
+// RecipeService.java
 package project.main.response.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import project.main.model.Ingredient;
+import project.main.model.Menu;
 import project.main.model.Recipe;
 import project.main.model.RecipeIngredient;
 import project.main.response.ingredient.IngredientNotFoundException;
 import project.main.response.ingredient.IngredientRepository;
+import project.main.response.menu.MenuNotFoundException;
+import project.main.response.menu.MenuRepository;
 
 @Service
 public class RecipeService {
 	@Autowired
 	RecipeRepository recipeRepo;
+	
+	@Autowired
+	MenuRepository menuRepo;
+	
+	@Autowired
+	IngredientRepository ingredientRepo;
+	
 	public List<Recipe> getRecipes(){
 		List<Recipe> orders = (List<Recipe>) recipeRepo.findAll();
 		return orders;
@@ -28,16 +38,7 @@ public class RecipeService {
 	public void save(Recipe r) {
 		recipeRepo.save(r);
 	}
-	/*
-	public Recipe addRecipe(Recipe r) {
-		recipeRepo.save(r);
-		return r;
-	}
-	*/
 	
-	@Autowired
-	IngredientRepository ingredientRepo;
-
 	public Recipe addRecipe(Recipe recipe) {
 	    if (recipe.getIngredients() != null) {
 	        for (RecipeIngredient ri : recipe.getIngredients()) {
@@ -50,7 +51,6 @@ public class RecipeService {
 	    }
 	    return recipeRepo.save(recipe);
 	}
-
 	
 	public void deleteById(Long id) {
 		Recipe recipe = recipeRepo.findById(id).orElseThrow(()->
@@ -59,20 +59,11 @@ public class RecipeService {
 		recipeRepo.delete(recipe);
 	}
 	
-	/*
-	public Recipe updateRecipe(Long id,Recipe r) {
-		Recipe existingRecipe = recipeRepo.findById(id).get();
-		existingRecipe.setIngredients(r.getIngredients());
-		existingRecipe.setSweetness(r.getSweetness());
-		return recipeRepo.save(existingRecipe);
-	}
-	*/
 	public Recipe updateRecipe(Long id, Recipe r) {
 	    Recipe existingRecipe = recipeRepo.findById(id)
 	            .orElseThrow(() -> new RecipeNotFoundException(id));
 	    
 	    existingRecipe.setSweetness(r.getSweetness());
-
 	    // เชื่อม RecipeIngredient กับ Recipe ก่อน save
 	    if (r.getIngredients() != null) {
 	        for (var ri : r.getIngredients()) {
@@ -80,8 +71,22 @@ public class RecipeService {
 	        }
 	    }
 	    existingRecipe.setIngredients(r.getIngredients());
-
 	    return recipeRepo.save(existingRecipe);
 	}
-
+	
+	// เพิ่ม method ใหม่สำหรับดึง recipes ตาม menu id
+	public List<Recipe> getRecipesByMenuId(Long menuId) {
+	    Menu menu = menuRepo.findById(menuId)
+	        .orElseThrow(() -> new MenuNotFoundException(menuId));
+	    
+	    // ถ้า Menu มี Recipe (One-to-One)
+	    if (menu.getRecipe() != null) {
+	        List<Recipe> recipes = new ArrayList<>();
+	        recipes.add(menu.getRecipe());
+	        return recipes;
+	    }
+	    
+	    // ถ้าไม่มี recipe คืน empty list
+	    return new ArrayList<>();
+	}
 }
