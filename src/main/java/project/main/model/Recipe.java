@@ -3,6 +3,7 @@ package project.main.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -17,7 +18,12 @@ public class Recipe {
     private Long id;
 
     private int sweetness;
-
+    
+    @ManyToOne
+    @JoinColumn(name = "menu_id")
+    @JsonBackReference
+    private Menu menu;
+    
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<RecipeIngredient> ingredients = new ArrayList<>();
@@ -45,7 +51,15 @@ public class Recipe {
     public void setSweetness(int sweetness) {
         this.sweetness = sweetness;
     }
+    
+    public Menu getMenu() {
+        return menu;
+    }
 
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+    
     public List<RecipeIngredient> getIngredients() {
         return ingredients;
     }

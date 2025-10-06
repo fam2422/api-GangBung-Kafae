@@ -31,13 +31,13 @@ public class MenuService {
 	RecipeRepository recipeRepo; // ต้องสร้าง repo ของ Recipe ด้วย
 
 	public Menu addMenu(Menu m) {
-	    if (m.getRecipe() != null && m.getRecipe().getId() != null) {
-	        Recipe recipeFromDb = recipeRepo.findById(m.getRecipe().getId())
-	            .orElseThrow(() -> new RuntimeException("Recipe not found"));
-	        m.setRecipe(recipeFromDb);
-	    }
-	    return menuRepo.save(m);
-	}
+        if (m.getRecipe() != null && !m.getRecipe().isEmpty()) {
+            for (Recipe recipe : m.getRecipe()) {
+                recipe.setMenu(m);
+            }
+        }
+        return menuRepo.save(m);
+    }
 
 	
 	public void deleteById(Long id) {
@@ -47,11 +47,15 @@ public class MenuService {
 		menuRepo.delete(menu);
 	}
 	
-	public Menu updateMenu(Long id,Menu m) {
-		Menu existingMenu = menuRepo.findById(id).get();
-		existingMenu.setName(m.getName());
-		existingMenu.setPrice(m.getPrice());
-		existingMenu.setRecipe(m.getRecipe());
-		return menuRepo.save(existingMenu);
-	}
+	public Menu updateMenu(Long id, Menu m) {
+        Menu existingMenu = menuRepo.findById(id).orElseThrow(() -> new MenuNotFoundException(id));
+        existingMenu.setName(m.getName());
+        existingMenu.setPrice(m.getPrice());
+        existingMenu.getRecipe().clear();
+        existingMenu.getRecipe().addAll(m.getRecipe());
+        for (Recipe recipe : existingMenu.getRecipe()) {
+            recipe.setMenu(existingMenu);
+        }
+        return menuRepo.save(existingMenu);
+    }
 }

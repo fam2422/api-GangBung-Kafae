@@ -82,7 +82,7 @@ public class RecipeService {
 	    // ถ้า Menu มี Recipe (One-to-One)
 	    if (menu.getRecipe() != null) {
 	        List<Recipe> recipes = new ArrayList<>();
-	        recipes.add(menu.getRecipe());
+	        recipes.addAll(menu.getRecipe());
 	        return recipes;
 	    }
 	    

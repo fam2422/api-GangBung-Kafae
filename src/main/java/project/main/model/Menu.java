@@ -19,14 +19,14 @@ public class Menu {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "menu_id") // จะสร้าง foreign key menu_id ในตาราง recipe
-    private List<Recipe> recipes = new ArrayList<>();
+    private List<Recipe> recipe = new ArrayList<>();
 
 
     private int price;
 
     public Menu() { }
 
-    public Menu(Long id, Recipe recipe, String name, int price) {
+    public Menu(Long id, List<Recipe> recipe, String name, int price) {
         this.id = id;
         this.recipe = recipe;
         this.name = name;
@@ -41,11 +41,11 @@ public class Menu {
         this.id = id;
     }
 
-    public Recipe getRecipe() {
+    public List<Recipe> getRecipe() {
         return recipe;
     }
 
-    public void setRecipe(Recipe recipe) {
+    public void setRecipe(List<Recipe> recipe) {
         this.recipe = recipe;
     }
 

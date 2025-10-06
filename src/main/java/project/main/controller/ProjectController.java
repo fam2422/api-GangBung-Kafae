@@ -138,6 +138,14 @@ public class ProjectController {
 		return ResponseEntity.ok("Menu deleted successfully");
 	}
 	
+	@GetMapping("/menu/{id}/recipes")
+	public ResponseEntity<List<Recipe>> getRecipesByMenu(@PathVariable Long id) {
+	    Menu menu = menuService.getMenuById(id);
+	    List<Recipe> recipes = menu.getRecipe();
+	    return new ResponseEntity<>(recipes, HttpStatus.OK);
+	}
+
+	
 	//-------------------------------------- Recipe --------------------------------------
 	@GetMapping("/recipes")
 	public ResponseEntity<List<Recipe>> getRecipes() {
