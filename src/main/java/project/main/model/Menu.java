@@ -1,5 +1,8 @@
 package project.main.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
@@ -14,9 +17,9 @@ public class Menu {
 
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "recipe_id", referencedColumnName = "id")
-    private Recipe recipe;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "menu_id") // จะสร้าง foreign key menu_id ในตาราง recipe
+    private List<Recipe> recipes = new ArrayList<>();
 
 
     private int price;

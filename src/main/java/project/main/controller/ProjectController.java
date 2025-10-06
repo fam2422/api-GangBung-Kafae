@@ -144,6 +144,12 @@ public class ProjectController {
 	    List<Recipe> recipes = recipeService.getRecipes();
 	    return new ResponseEntity<>(recipes, HttpStatus.OK);
 	}
+	
+	@GetMapping("/menu/{id}/recipes") // http://localhost:8080/api/gangbung/menu/{id}/recipes
+	public ResponseEntity<List<Recipe>> getRecipesByMenuId(@PathVariable("id") Long menuId) {
+	    List<Recipe> recipes = recipeService.getRecipesByMenuId(menuId);
+	    return new ResponseEntity<>(recipes, HttpStatus.OK);
+	}
 
 	@GetMapping("/recipe/{id}") // http://localhost:8080/api/gangbung/recipe/{id}
 	public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") Long Id) {
