@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import project.main.model.Ingredient;
+import project.main.response.location.LocationRepository;
 
 @Service
 public class IngredientService {
 	@Autowired
 	IngredientRepository ingredientRepo;
+	@Autowired
+	LocationRepository locationRepo;
 	
 	public List<Ingredient> getIngredients(){
 		List<Ingredient> ingredients = (List<Ingredient>) ingredientRepo.findAll();
@@ -26,9 +29,8 @@ public class IngredientService {
 		ingredientRepo.save(i);
 	}
 	
-	public Ingredient addIngredient(Ingredient i) {
-		ingredientRepo.save(i);
-		return i;
+	public Ingredient addIngredient(Ingredient ingredient) {
+	    return ingredientRepo.save(ingredient);
 	}
 	
 	public void deleteById(Long id) {
@@ -42,7 +44,7 @@ public class IngredientService {
 		Ingredient existingIngredient = ingredientRepo.findById(id).get();
 		existingIngredient.setName(i.getName());
 		existingIngredient.setStockQty(i.getStockQty());
-		existingIngredient.setUnit(i.getUnit() != null ? i.getUnit() : existingIngredient.getUnit());
+		existingIngredient.setUnit(i.getUnit());
 		return ingredientRepo.save(existingIngredient);
 	}
 }

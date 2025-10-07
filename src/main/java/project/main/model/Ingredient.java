@@ -9,9 +9,7 @@ import jakarta.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ingredient {
 	
-	public enum Unit{
-		piece,g,kg,ml,L
-	}
+	private String unit = "ml"; // default value
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +19,10 @@ public class Ingredient {
     
     private Long stockQty;
     
-    private Unit unit = Unit.ml; // default value 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
+    private Location location;
+    
     public Ingredient() { }
 
     public Ingredient(Long id, String name, Long stockQty) {
@@ -54,16 +55,24 @@ public class Ingredient {
         this.stockQty = stockQty;
     }
     
-    public Unit getUnit() {
+    public String getUnit() {
     	return unit;
     }
     
-    public void setUnit(Unit unit) {
+    public void setUnit(String unit) {
     	this.unit = unit;
     }
+    
+    public Location getLocation() {
+		return location;
+	}
 
-    @Override
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	@Override
     public String toString() {
-        return "Ingredient{id=" + id + ", name='" + name + "', stockQty=" + stockQty + "}";
+        return "Ingredient{id=" + id + ", name='" + name + "', stockQty=" + stockQty + "', location=" + location + "}";
     }
 }
