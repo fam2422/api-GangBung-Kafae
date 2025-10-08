@@ -17,8 +17,6 @@ public class Order {
     
     private LocalDateTime createdAt;
 
-    private String status;
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("order-orderitems")
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -26,13 +24,17 @@ public class Order {
 
     public Order() { }
 
-    public Order(Long id, LocalDateTime createdAt, String status,List<OrderItem> orderItems) {
+    public Order(Long id, LocalDateTime createdAt,List<OrderItem> orderItems) {
         this.id = id;
         this.createdAt = createdAt;
-        this.status = status;
         this.orderItems = orderItems;
     }
-
+    
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    
     public Long getId() {
         return id;
     }
@@ -47,14 +49,6 @@ public class Order {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public List<OrderItem> getOrderItems() {

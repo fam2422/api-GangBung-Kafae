@@ -19,7 +19,7 @@ public class Recipe {
     
     @ManyToOne
     @JoinColumn(name = "menu_id")
-    @JsonBackReference("menu-recipes") // <-- ต้องตรงกับ Menu
+    @JsonBackReference("menu-recipes")
     private Menu menu;
     
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)

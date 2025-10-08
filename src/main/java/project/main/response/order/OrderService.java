@@ -54,7 +54,6 @@ public class OrderService {
 	public Order updateOrder(Long id,Order o) {
 		Order existingOrder = orderRepo.findById(id).get();
 		existingOrder.setOrderItems(o.getOrderItems());
-		existingOrder.setStatus(o.getStatus());
 		return orderRepo.save(existingOrder);
 	}
 	

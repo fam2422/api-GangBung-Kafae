@@ -33,17 +33,19 @@ public class MenuService {
 
 	public Menu addMenu(Menu m) {
 	    if (m.getRecipe() != null && !m.getRecipe().isEmpty()) {
-	        List<Recipe> attachedRecipes = new ArrayList<>();
 	        for (Recipe recipe : m.getRecipe()) {
-	            Recipe recipeFromDb = recipeRepo.findById(recipe.getId())
-	                    .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + recipe.getId()));
-	            recipeFromDb.setMenu(m); // attach menu
-	            attachedRecipes.add(recipeFromDb);
+	            recipe.setMenu(m); // attach back-reference Menu → Recipe
+	            // attach back-reference Recipe → RecipeIngredient
+	            if (recipe.getIngredients() != null) {
+	                for (var ri : recipe.getIngredients()) {
+	                    ri.setRecipe(recipe);
+	                }
+	            }
 	        }
-	        m.setRecipe(attachedRecipes);
 	    }
-	    return menuRepo.save(m);
+	    return menuRepo.save(m); // cascade = ALL จะสร้าง Recipe + RecipeIngredient ใหม่ให้
 	}
+
 
 
 	
