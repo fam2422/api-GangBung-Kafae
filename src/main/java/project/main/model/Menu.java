@@ -22,10 +22,9 @@ public class Menu {
     @JsonManagedReference("menu-recipes")
     private List<Recipe> recipe = new ArrayList<>();
     
-    @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@JsonManagedReference("menu-orderitems")
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnoreProperties("menu")
-    private OrderItem orderItem;
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     private int price;
 
