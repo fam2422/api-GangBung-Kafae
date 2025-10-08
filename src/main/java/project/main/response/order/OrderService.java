@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import project.main.model.Menu;
 import project.main.model.Order;
 import project.main.model.OrderItem;
+import project.main.model.Recipe;
 import project.main.response.menu.MenuRepository;
+import project.main.response.recipe.RecipeRepository;
 
 @Service
 public class OrderService {
@@ -31,17 +33,32 @@ public class OrderService {
 	@Autowired
 	MenuRepository menuRepo;
 
+	@Autowired
+	RecipeRepository recipeRepo;
+
 	public Order addOrder(Order o) {
 	    for (OrderItem oi : o.getOrderItems()) {
+	        // attach menu
 	        if (oi.getMenu() != null && oi.getMenu().getId() != null) {
 	            Menu menuFromDb = menuRepo.findById(oi.getMenu().getId())
 	                .orElseThrow(() -> new RuntimeException("Menu not found"));
 	            oi.setMenu(menuFromDb);
-	            oi.setOrder(o); // important! set back reference
 	        }
+
+	        // attach recipe
+	        if (oi.getRecipe() != null && oi.getRecipe().getId() != null) {
+	            Recipe recipeFromDb = recipeRepo.findById(oi.getRecipe().getId())
+	                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+	            oi.setRecipe(recipeFromDb);
+	        }
+
+	        // back reference
+	        oi.setOrder(o);
 	    }
+
 	    return orderRepo.save(o);
 	}
+
 
 	
 	public void deleteById(Long id) {

@@ -21,6 +21,10 @@ public class OrderItem {
     @JsonBackReference("order-orderitems")
     private Order order;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipe_id")
+    @JsonIgnoreProperties({"menu", "ingredients"})
+    private Recipe recipe;
 
     private int qty;
 
@@ -63,4 +67,14 @@ public class OrderItem {
     public void setQty(int qty) {
         this.qty = qty;
     }
+
+	public Recipe getRecipe() {
+		return recipe;
+	}
+
+	public void setRecipe(Recipe recipe) {
+		this.recipe = recipe;
+	}
+    
+    
 }
