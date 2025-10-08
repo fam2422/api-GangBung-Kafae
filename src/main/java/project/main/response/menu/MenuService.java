@@ -1,5 +1,6 @@
 package project.main.response.menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,19 @@ public class MenuService {
 	RecipeRepository recipeRepo; // ต้องสร้าง repo ของ Recipe ด้วย
 
 	public Menu addMenu(Menu m) {
-        if (m.getRecipe() != null && !m.getRecipe().isEmpty()) {
-            for (Recipe recipe : m.getRecipe()) {
-                recipe.setMenu(m);
-            }
-        }
-        return menuRepo.save(m);
-    }
+	    if (m.getRecipe() != null && !m.getRecipe().isEmpty()) {
+	        List<Recipe> attachedRecipes = new ArrayList<>();
+	        for (Recipe recipe : m.getRecipe()) {
+	            Recipe recipeFromDb = recipeRepo.findById(recipe.getId())
+	                    .orElseThrow(() -> new RuntimeException("Recipe not found with id: " + recipe.getId()));
+	            recipeFromDb.setMenu(m); // attach menu
+	            attachedRecipes.add(recipeFromDb);
+	        }
+	        m.setRecipe(attachedRecipes);
+	    }
+	    return menuRepo.save(m);
+	}
+
 
 	
 	public void deleteById(Long id) {

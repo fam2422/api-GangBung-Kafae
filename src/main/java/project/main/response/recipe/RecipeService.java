@@ -40,17 +40,21 @@ public class RecipeService {
 	}
 	
 	public Recipe addRecipe(Recipe recipe) {
-	    if (recipe.getIngredients() != null) {
-	        for (RecipeIngredient ri : recipe.getIngredients()) {
-	            // fetch Ingredient จริงจาก DB
-	            Ingredient ingredientFromDb = ingredientRepo.findById(ri.getIngredient().getId())
-	                .orElseThrow(() -> new IngredientNotFoundException(ri.getIngredient().getId()));
-	            ri.setIngredient(ingredientFromDb); // ใส่ Ingredient จริง
-	            ri.setRecipe(recipe); // เชื่อมกลับไป Recipe
-	        }
-	    }
-	    return recipeRepo.save(recipe);
-	}
+        // ตรวจสอบ ingredients ที่แนบมา
+        if (recipe.getIngredients() != null) {
+            for (RecipeIngredient ri : recipe.getIngredients()) {
+                if (ri.getIngredient() != null && ri.getIngredient().getId() != null) {
+                    // ดึง Ingredient จากฐานข้อมูลจริง
+                    Ingredient ingredientFromDb = ingredientRepo.findById(ri.getIngredient().getId())
+                            .orElseThrow(() -> new IngredientNotFoundException(ri.getIngredient().getId()));
+
+                    ri.setIngredient(ingredientFromDb);
+                    ri.setRecipe(recipe); // ผูกกลับไปยัง recipe หลัก
+                }
+            }
+        }
+        return recipeRepo.save(recipe);
+    }
 	
 	public void deleteById(Long id) {
 		Recipe recipe = recipeRepo.findById(id).orElseThrow(()->
@@ -63,7 +67,7 @@ public class RecipeService {
 	    Recipe existingRecipe = recipeRepo.findById(id)
 	            .orElseThrow(() -> new RecipeNotFoundException(id));
 	    
-	    existingRecipe.setName(r.getName());
+	    existingRecipe.setSweetLevel(r.getSweetLevel());
 	    // เชื่อม RecipeIngredient กับ Recipe ก่อน save
 	    if (r.getIngredients() != null) {
 	        for (var ri : r.getIngredients()) {

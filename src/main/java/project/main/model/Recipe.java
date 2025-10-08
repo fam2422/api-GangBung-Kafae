@@ -3,9 +3,7 @@ package project.main.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
 
@@ -17,22 +15,22 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String sweetLevel;
     
     @ManyToOne
     @JoinColumn(name = "menu_id")
-    @JsonBackReference
+    @JsonBackReference("menu-recipes") // <-- ต้องตรงกับ Menu
     private Menu menu;
     
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonManagedReference("recipe-ingredients")
     private List<RecipeIngredient> ingredients = new ArrayList<>();
 
     public Recipe() { }
 
-    public Recipe(Long id, String name,List<RecipeIngredient> ingredients) {
+    public Recipe(Long id, String sweetLevel,List<RecipeIngredient> ingredients) {
         this.id = id;
-        this.name = name;
+        this.sweetLevel = sweetLevel;
         this.ingredients = ingredients;
     }
 
@@ -44,12 +42,12 @@ public class Recipe {
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getSweetLevel() {
+        return this.sweetLevel;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setSweetLevel(String sweetLevel) {
+        this.sweetLevel = sweetLevel;
     }
     
     public Menu getMenu() {
@@ -66,10 +64,14 @@ public class Recipe {
 
     public void setIngredients(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;
+        for (RecipeIngredient ri : ingredients) {
+            ri.setRecipe(this);
+        }
     }
-
+    
+    
     @Override
     public String toString() {
-        return "Recipe{id=" + id + ", Name=" + name + "}";
+        return "Recipe{id=" + id + ", SweetLevel=" + sweetLevel + ", ingredients=" + ingredients + "}";
     }
 }

@@ -3,8 +3,7 @@ package project.main.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 
 import jakarta.persistence.*;
 
@@ -19,11 +18,13 @@ public class Menu {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "menu_id") // จะสร้าง foreign key menu_id ในตาราง recipe
+    @JoinColumn(name = "menu_id")
+    @JsonManagedReference("menu-recipes")
     private List<Recipe> recipe = new ArrayList<>();
     
     @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    //@JsonManagedReference("menu-orderitems")
+    @JsonIgnore
     private OrderItem orderItem;
 
     private int price;

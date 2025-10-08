@@ -40,9 +40,9 @@ public class RecipeController {
 
 	@PostMapping("/recipe")
 	public ResponseEntity<Recipe> addNewRecipe(@RequestBody Recipe recipe) {
-		System.out.println(recipe);
-		Recipe saveRecipe = recipeService.addRecipe(recipe);
-		return new ResponseEntity<>(saveRecipe, HttpStatus.CREATED);
+	    System.out.println(recipe);
+	    Recipe saveRecipe = recipeService.addRecipe(recipe);
+	    return new ResponseEntity<>(saveRecipe, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/recipe/{id}")
