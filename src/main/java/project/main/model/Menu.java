@@ -24,7 +24,7 @@ public class Menu {
     
     @OneToOne(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //@JsonManagedReference("menu-orderitems")
-    @JsonIgnore
+    @JsonIgnoreProperties("menu")
     private OrderItem orderItem;
 
     private int price;

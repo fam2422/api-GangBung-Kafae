@@ -1,6 +1,7 @@
 package project.main.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,7 +13,7 @@ public class OrderItem {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id", unique = true)
-    @JsonBackReference
+    @JsonIgnoreProperties("orderItem")
     private Menu menu;
 
     @ManyToOne(fetch = FetchType.LAZY)
